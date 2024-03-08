@@ -14,13 +14,13 @@
 * [Future Directions](#Future_Directions)
 
 
-### Introduciton<a id='Introduction'></a>
+### Introduction<a id='Introduction'></a>
 
 Taiwan's travel and tourism industry plays a significant role in its economy, contributing to economic growth, job creation, and cultural exchange. The foreign exchange earnings from tourism for the year 2019 were estimated to be 14.41 billion US dollars, which was 4.43% of Taiwan's GDP. The total number of visitors to Taiwan in 2019 also reached an all-time-high record, 11.85 million.
 
 However, after the outbreak of COVID-19, the total number of tourists was down 98.82% to less than 0.14 million in 2021. As a result, the foreign exchange earnings from tourism also dropped drastically, from 14 to 1.8 billion US dollars. The goal of this study is **to determine whether visitors to Taiwan are increasing, declining or being stagnant before pandemic and to build a time series model that forecasts the future number of visitors from the perspective of the past.**
 
-The result of this study can be used as a guidance and empower the Taiwan Tourism Bureau to make informed decisions, optimize resource utilization, reform marketing strategis, and enhance the overall tourism ecosystem in Taiwan.
+The result of this study can be used as a guidance and empower the Taiwan Tourism Bureau to make informed decisions, optimize resource utilization, reform marketing strategies, and enhance the overall tourism ecosystem in Taiwan.
 
 ### Data Wrangling<a id='Data_Wrangling'></a>
 
@@ -28,7 +28,7 @@ The result of this study can be used as a guidance and empower the Taiwan Touris
 
 The key data source is a single CSV file, with 29454 rows and 20 columns, which can be downloaded from [Taiwan Tourism Bureau](https://stat.taiwan.net.tw/). It contains the monthly number of visitors to Taiwan by their gender, residence and purpose from January 2011 to November 2023. Although the original dataset is relatively clean and does not contain missing values upon initial inspection, we can see that it is not in a favorable format and does require additional data wrangling work. For example, we are not particularly interested in the gender information and have to reshape our data frame by unpivoting the gender in each purpose categories.
 
-After looking into the two categorical features, we learned that this dataset contains a total of 184 residence regions, along with an additional category labeled as `'Unknow.'` Furthermore, all of the visitors were categorized into the following 8 groups based on their purporse of travel: 
+After looking into the two categorical features, we learned that this dataset contains a total of 184 residence regions, along with an additional category labeled as `'Unknow.'` Furthermore, all of the visitors were categorized into the following 8 groups based on their purpose of travel: 
 
  - **Business**
  - **Leisure**
@@ -54,13 +54,13 @@ The first thing we would like to know is the general trend in the total annual n
 
 <img src="./Images/img-2.png" width="500">
 
-After plotting the monthly visitor number instead of the annual sum, we can see there is definitely a seasonal pattern in the total number of visitors. The number started to climb up from the beginning of each year, reached the first peak in spring, and declined towards the summer. Afterwards, it rised again and reached the second peak in fall, and decreased towards the end of each year. However, this pattern was only evident before the outburst of pandemic.
+After plotting the monthly visitor number instead of the annual sum, we can see there is definitely a seasonal pattern in the total number of visitors. The number started to climb up from the beginning of each year, reached the first peak in spring, and declined towards the summer. Afterwards, it raised again and reached the second peak in fall, and decreased towards the end of each year. However, this pattern was only evident before the outburst of pandemic.
 
 #### 3. What were the top 20 countries of residence that visitors to Taiwan came from in the most recent three years before pandemic (2017-2019)?
 
 <img src="./Images/img-3.png" width="500">
 
-In addition to the general trend and sesonal pattern, it will be very interesting to explore which country demonstrated a particular fondness for visiting Taiwan in the three years leading up to the pandemic. We exclusively focus on the data before 2020, as post-pandemic visitor trends were substantially influenced by travel restrictions imposed by respective countries, which may not accurately capture the essence of this inquiry. As you can see in the above horizontal bar chart, Mainland China loves to visit Taiwan the most during 2017-2019, followed by Japan, Hong Kong, Korea, and USA.
+In addition to the general trend and seasonal pattern, it will be very interesting to explore which country demonstrated a particular fondness for visiting Taiwan in the three years leading up to the pandemic. We exclusively focus on the data before 2020, as post-pandemic visitor trends were substantially influenced by travel restrictions imposed by respective countries, which may not accurately capture the essence of this inquiry. As you can see in the above horizontal bar chart, Mainland China loves to visit Taiwan the most during 2017-2019, followed by Japan, Hong Kong, Korea, and USA.
 
 #### 4. What were the top 20 countries of residence that visitors to Taiwan came from during 2011-2013?
 
@@ -78,7 +78,7 @@ Finally, we investigate the distribution of travel purpose over the 13 years. We
 
 [Pre-processing Work Notebook](./Notebooks/27.1.1_Capstone%203_Pre-processing%20Work%20%26%20Modeling.ipynb)
 
-Time series data encompasses the representation of how a single variable changes over time. It usually contains a sequence of metrics collected at consistent intervals. In our case, this includes the monthly number of visitors to Taiwan. In our previos EDA, we already learned that there is a upward trend in visitors to Taiwan from 2011 to 2023 despite a drastic downturn in 2020 due to the Covid-19. There is also a seasonal pattern in the total number of visitors with a repeated pattern. 
+Time series data encompasses the representation of how a single variable changes over time. It usually contains a sequence of metrics collected at consistent intervals. In our case, this includes the monthly number of visitors to Taiwan. In our previous EDA, we already learned that there is a upward trend in visitors to Taiwan from 2011 to 2023 despite a drastic downturn in 2020 due to the Covid-19. There is also a seasonal pattern in the total number of visitors with a repeated pattern. 
 
 Because the general trend does not increase at a steady speed and the amplitude of seasonal fluctuations gets bigger as time progresses, our data should be multiplicative. As a result, we can use a multiplicative model to decompose the data, breaking it into the following three components: **Trend, Seasonality, and Noise.**
 
@@ -100,7 +100,7 @@ It is evident that both the mean and variance of our data increase over time, wh
 
 > Plot the data after natural log transformation
 
-After log transformation, we can see that the variance in our data now remains more contant over time than that before transformation. Although we have a constant variance, we also need a constant mean. At this moment, our p-value of KPSS test, 0.014, is still less than 0.05, indicating non-stationarity. We can achieve a constant mean by differencing our data. Differencing involves creating a new time series that represents the difference between consecutive values in our existing dataset. We can use the `diff()` function for this purpose.
+After log transformation, we can see that the variance in our data now remains more constant over time than that before transformation. Although we have a constant variance, we also need a constant mean. At this moment, our p-value of KPSS test, 0.014, is still less than 0.05, indicating non-stationarity. We can achieve a constant mean by differencing our data. Differencing involves creating a new time series that represents the difference between consecutive values in our existing dataset. We can use the `diff()` function for this purpose.
 
 <img src="./Images/img-10.png" width="500">
 
@@ -108,7 +108,7 @@ After log transformation, we can see that the variance in our data now remains m
 
 We further test stationarity with KPSS after natural log transformation and differencing. The resulting p-value of KPSS test, 0.1, is now greater than 0.05, so we can accept the null hypothesis that our data is stationary. When we use `adfuller()`, p-value is much smaller than 0.05, suggesting that we could reject the Null hypothesis and our data is stationary (not a random walk). In this case since both tests indicate stationarity, the series can be deemed to be trend-stationary. Trend-stationarity implies difference-stationarity, but the reverse is not necessarily true. Keep in mind that if the KPSS test indicates stationarity and the Dicky-Fuller test indicates non-stationarity, it's a sign that the series is only difference-stationary. 
 
-Using both tests ensures us that we avoid misinterpreting the type of stationarity or the presence of a trend in the data. In practice, the goal is often to make the data either difference-stationary, trend-stationary, or both, depending on the characteristics of the time series. Many time series models, like the popular ARIMA (AutoRegressive Integrated Moving Average) model, are designed to work with difference-stationary data. These models often involve differencing the original series to achieve stationarity.
+Using both tests ensures us that we avoid misinterpreting the type of stationarity or the presence of a trend in the data. In practice, the goal is often to make the data either difference-stationary, trend-stationary, or both, depending on the characteristics of the time series. Many time series models, like the popular ARIMA (Auto Regressive Integrated Moving Average) model, are designed to work with difference-stationary data. These models often involve differencing the original series to achieve stationarity.
 
 White noise is a special case of a stationary time series. It is characterized by a constant mean, a constant variance and no autocorrelation. However, it is also characterized by its lack of discernible patterns, structure, or correlations between observations. Because of its randomness and lack of patterns, white noise is inherently difficult to predict. Therefore, we will further examine the Autocorrelation Function (ACF) plot of our data.
 
@@ -116,7 +116,7 @@ White noise is a special case of a stationary time series. It is characterized b
 
 After plotting ACF, we found there is at least one lag, other than lag 0, is significantly different from zero in the ACF, which suggests the presence of autocorrelation in our time series data. Because autocorrelation is detected, it might be appropriate to consider more complex models that capture the temporal dependencies in the data. This could involve ARIMA models or other sophisticated time series models.
 
-In order to generate an ARIMA model, we have to estimate the order (p, d, q) of the model. There are multiple ways to find good parameters of our model, e.q. using Autocorrelation Function (ACF) and Partial Autocorrelation Function (PACF) to choose model order. However, ACF and PACF rarely gave us a conclusive model choice in my experience and we should always loop over multiple parameters to find the best model order. Herein, we will try the following two ways to identify the optimal order of an ARIMA model.
+In order to generate an ARIMA model, we have to estimate the order (p, d, q) of the model. There are multiple ways to find good parameters of our model, e.g. using Autocorrelation Function (ACF) and Partial Autocorrelation Function (PACF) to choose model order. However, ACF and PACF rarely gave us a conclusive model choice in my experience and we should always loop over multiple parameters to find the best model order. Herein, we will try the following two ways to identify the optimal order of an ARIMA model.
 
 The first method is to calculate the root mean squared error (RMSE) and mean absolute error (MAE) between our predictions and true values. We implemented the one-step approach to calculate RMSE and MAE because it provides a more dynamic and accurate measure of the model's performance in a real-world scenario. In this approach, predictions are made, true values are observed, and subsequent predictions are then generated. The resulting RMSE/MAE calculated through this method offers a potentially more precise representation of the model's out-of-sample performance, capturing the nuances of the prediction-observation process in a dynamic setting.
 
@@ -180,7 +180,7 @@ In this preliminary experiment, the Bayesian Ridge model highlighted at the top 
 
 Surprisingly, the Bayesian Ridge model predicts another downturn in the next 24 months, which contradicts our expectation and common scenario based on the potential trajectory of the travel industry during a recovery phase post-pandemic. As far as we understand, there has been a notable surge in visitor numbers, marking a robust rebound following the global pandemic.
 
-In fact, most top performers on the aformentioned table of performance metrics yield a similar downtrend. We will further look into other alternatives that potentially can forecast a more reasonable outcome in our case. Specifically, we will use the `create_model()` function to generate additional models of interest (i.e. SARIMA and Exponential Smoothing) and plot them.
+In fact, most top performers on the aforementioned table of performance metrics yield a similar downtrend. We will further look into other alternatives that potentially can forecast a more reasonable outcome in our case. Specifically, we will use the `create_model()` function to generate additional models of interest (i.e. SARIMA and Exponential Smoothing) and plot them.
 
 <img src="./Images/img-20.png" width="600">
 
